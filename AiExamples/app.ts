@@ -1,26 +1,56 @@
-﻿
+﻿/// <reference path="Scripts/typings/tsd.d.ts" />
+/// <reference path="Scripts/Search/AStar/AStar.ts" />
 
-var initialState = [[8, null, 9],
-    [6, 1, 6],
+console.log('Start.');
+
+const initialState = [[8, null, 9],
+    [2, 1, 6],
     [5, 8, 7]];
 
-var puzzle = new Search.AStar.AStarEightPuzzle(initialState);
+const desiredState = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, null]
+];
+
+//const initialState = [
+//    [null, 1],
+//    [3 , 2]
+//];
+   
+
+//const desiredState = [
+//    [1, 2],
+//    [3, null]
+//];
+
+var printState = (state: number[][]) => {
+    for (var i = 0; i < state.length; i++) {
+        console.log(state[i]);
+    }
+};
+
+printState(initialState);
+import aStarEightPuzzle = require("./Scripts/Search/AStar/AStar");
+var puzzle = new aStarEightPuzzle.AStar.AStarEightPuzzle(initialState, desiredState);
 
 console.log('Solving...');
-var actionsToSolve = puzzle.solve();
+var moves = puzzle.solve();
 console.log('Solved.');
 
-var state = initialState;
 
-var display = (actionIndex: number) => {
-    var action = actionsToSolve[actionIndex];
-    actionIndex++;
-    console.clear();
-    console.log(state);
-    state = action.applyFunction(state);
-    if (actionIndex <= actionsToSolve.length) {
-        setTimeout(display, 500, actionIndex);
+var display = (stateIndex: number) => {
+    var state = moves[stateIndex];
+ 
+    
+    console.log('\033[2J'); // clear
+
+    printState(state);
+    if (stateIndex < moves.length-1) {
+        stateIndex++;
+        setTimeout(display, 1500, stateIndex);
+        
     }
 }
-setTimeout(display, 500, 0);
+setTimeout(display, 1000, 0);
 
