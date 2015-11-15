@@ -24,12 +24,9 @@ export module AStar {
         }
 
         checkSolvable(state: number[][]): Boolean {
-
             var unfolded = _.flatten(state);
             unfolded = _.without(unfolded, null);
-
             var inversions: number = 0;
-
             for (var i: number = 0; i < unfolded.length; i++) {
                 for (var j: number = i + 1; j < unfolded.length; j++) {
                     if (unfolded[j] > unfolded[i]) {
@@ -37,12 +34,7 @@ export module AStar {
                     }
                 }
             }
-
-            if (inversions % 2 == 1) {
-                return false;
-            } else {
-                return true;
-            }
+            return inversions % 2 === 0;
         }
 
 
