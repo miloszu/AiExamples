@@ -3,26 +3,26 @@
 
 console.log('Start.');
 
-const initialState = [[8, null, 9],
-    [2, 1, 6],
-    [5, 8, 7]];
-
-const desiredState = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, null]
-];
-
-//const initialState = [
-//    [null, 1],
-//    [3 , 2]
-//];
-   
+//const initialState = [[8, null, 9],
+//    [2, 1, 6],
+//    [5, 8, 7]];
 
 //const desiredState = [
-//    [1, 2],
-//    [3, null]
+//    [1, 2, 3],
+//    [4, 5, 6],
+//    [7, 8, null]
 //];
+
+const initialState = [
+    [null, 1],
+    [3 , 2]
+];
+   
+
+const desiredState = [
+    [1, 2],
+    [3, null]
+];
 
 var printState = (state: number[][]) => {
     for (var i = 0; i < state.length; i++) {
@@ -41,10 +41,9 @@ console.log('Solved.');
 
 var display = (stateIndex: number) => {
     var state = moves[stateIndex];
- 
-    
-    console.log('\033[2J'); // clear
 
+    console.log('\033[2J'); // clear
+    console.log("Solution:");
     printState(state);
     if (stateIndex < moves.length-1) {
         stateIndex++;
