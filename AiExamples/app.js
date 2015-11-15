@@ -12,18 +12,49 @@ console.log('Start.');
 //    [4, 5, 6],
 //    [7, 8, null]
 //];
-//Easy:
+//d=8:
+//const initialState = [
+//    [2, 4, 3],
+//    [1, 6, 8],
+//    [7, 5, null]
+//];
+//const desiredState = [
+//    [1, 2, 3],
+//    [4, 5, 6],
+//    [7, 8, null]
+//];
+//d = 12
+//const initialState = [
+//    [2, 4, 3],
+//    [6, null, 8],
+//    [1, 7, 5]
+//];
+//const desiredState = [
+//    [1, 2, 3],
+//    [4, 5, 6],
+//    [7, 8, null]
+//];
+//d = 22
+//const initialState = [
+//    [null, 8, 4],
+//    [1, 2, 3],
+//    [6, 7, 5]
+//];
+//const desiredState = [
+//    [1, 2, 3],
+//    [4, 5, 6],
+//    [7, 8, null]
+//];
 var initialState = [
-    [2, 4, 3],
-    [1, 6, 8],
-    [7, 5, null]
-];
+    [1, null, 8],
+    [3, 6, 7],
+    [5, 4, 2]];
 var desiredState = [
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, null]
 ];
-//Random
+//Random unsolvable
 //const initialState = [
 //    [3, null, 4],
 //    [2, 1, 6],

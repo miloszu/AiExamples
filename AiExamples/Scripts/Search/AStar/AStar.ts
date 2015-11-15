@@ -5,8 +5,7 @@ export module AStar {
 
 
     export class AStarEightPuzzle {
-
-
+        
         constructor(private initalState: number[][], private desiredState: number[][]) {
             if (!this.checkSolvable(initalState)) {
                 throw 'This combination is unsolvable.';
@@ -27,6 +26,7 @@ export module AStar {
         checkSolvable(state: number[][]): Boolean {
 
             var unfolded = _.flatten(state);
+            unfolded = _.without(unfolded, null);
 
             var inversions: number = 0;
 
