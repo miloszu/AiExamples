@@ -8,7 +8,9 @@ export module AStar {
 
 
         constructor(private initalState: number[][], private desiredState: number[][]) {
-
+            if (!this.checkSolvable(initalState)) {
+                throw 'This combination is unsolvable.';
+            }
         }
 
 
@@ -22,8 +24,30 @@ export module AStar {
             return { x: -1, y: -1 };
         }
 
+        checkSolvable(state: number[][]): Boolean {
+
+            var unfolded = _.flatten(state);
+
+            var inversions: number = 0;
+
+            for (var i: number = 0; i < unfolded.length; i++) {
+                for (var j: number = i + 1; j < unfolded.length; j++) {
+                    if (unfolded[j] > unfolded[i]) {
+                        inversions++;
+                    }
+                }
+            }
+
+            if (inversions % 2 == 1) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
 
         solve(): number[][][] {
+
             const left = new Action<number[][]>();
             left.name = "Left";
             left.cost = 1;
@@ -53,7 +77,7 @@ export module AStar {
             up.cost = 1;
             up.applyFunction = (state: number[][]) => {
                 var emptyCell = this.getCoordinatesOf(state, null);
-                if (emptyCell.y < 0) {
+                if (emptyCell.y > 0) {
                     state[emptyCell.y][emptyCell.x] = state[emptyCell.y - 1][emptyCell.x];
                     state[emptyCell.y - 1][emptyCell.x] = null;
                     return state;
@@ -72,7 +96,7 @@ export module AStar {
                 }
                 return null;
             };
-          
+
             const actions = [left, right, up, down];
             const manhattanDistance = (current: number[][], desired: number[][]) => {
                 var cost = 0;
@@ -81,7 +105,7 @@ export module AStar {
                         const actualLocation = this.getCoordinatesOf(current, num);
                         const desiredLocation = this.getCoordinatesOf(desired, num);
                         cost += Math.abs(actualLocation.x - desiredLocation.x) +
-                            Math.abs(actualLocation.y - desiredLocation.y);
+                        Math.abs(actualLocation.y - desiredLocation.y);
                     });
                 });
                 return cost;
@@ -91,13 +115,20 @@ export module AStar {
                 state.forEach(row => {
                     clone.push(row.slice());
                 });
-               return clone;
+                return clone;
             }
 
             var printState = (state: number[][]) => {
-                process.stdout.write('\033c');
                 for (var i = 0; i < state.length; i++) {
-                    console.log(state[i]);
+                    var line = "";
+                    for (var j = 0; j < state[i].length; j++) {
+                        if (state[i][j]) {
+                            line += state[i][j] + "\t";
+                        } else {
+                            line += "\t";
+                        }
+                    }
+                    console.log(line);
                 }
             };
 
@@ -154,22 +185,31 @@ export module AStar {
         }
 
         solve(initialState: TState): TreeNode<TState> {
-            
+
             this.trunk = new TreeNode<TState>(initialState, 0);
             var frontier: TreeNode<TState>[] = [];
+            var visitedState: TState[] = [];
             var toExpand = this.trunk;
             while (true) {
                 this.avaliableActions.forEach(action => {
+                    //expanding
                     var childState = action.applyFunction(this.stateClone(toExpand.state));
                     if (childState != null) {
-                        const childNode = new TreeNode<TState>(childState, action.cost);
-                        childNode.parent = toExpand;
-                        frontier.push(childNode);
+                        var alreadyChecked = _.any(visitedState, (state) => { return _.isEqual(childState, state) });
+                        if (!alreadyChecked) {
+                            const childNode = new TreeNode<TState>(childState, action.cost);
+                            childNode.parent = toExpand;
+                            frontier.push(childNode);
+                        }
                     }
                 });
-                
+
                 toExpand = this.getNextToExpand(frontier);
-                console.log("Searching:");
+                visitedState.push(toExpand.state);
+                process.stdout.write('\033c');
+                var nodeH = this.h(toExpand.state, this.desiredState);
+                var nodeG = toExpand.getCostToRoot();
+                console.log("g: " + nodeG + "\th: " + nodeH+ "\tg + h: "+ (nodeG + nodeH) + "\t Frontier Length: " + frontier.length + "\tVisited States: " + visitedState.length);
                 this.printState(toExpand.state);
 
                 frontier = _.without(frontier, toExpand);
@@ -184,6 +224,6 @@ export module AStar {
             return minNode;
         }
     }
-    
+
 
 }

@@ -3,7 +3,33 @@
 
 console.log('Start.');
 
-//const initialState = [[8, null, 9],
+//Unsolvable:
+//const initialState = [
+//    [1, 2, 3],
+//    [4, 5, 6],
+//    [8, 7, null]
+//];
+//const desiredState = [
+//    [1, 2, 3],
+//    [4, 5, 6],
+//    [7, 8, null]
+//];
+
+//Easy:
+const initialState = [
+    [2, 4, 3],
+    [1, 6, 8],
+    [7, 5, null]
+];
+const desiredState = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, null]
+];
+
+//Random
+//const initialState = [
+//    [3, null, 4],
 //    [2, 1, 6],
 //    [5, 8, 7]];
 
@@ -13,20 +39,29 @@ console.log('Start.');
 //    [7, 8, null]
 //];
 
-const initialState = [
-    [null, 1],
-    [3 , 2]
-];
+//Trivial:
+//const initialState = [
+//    [null, 1],
+//    [3 , 2]
+//];
    
 
-const desiredState = [
-    [1, 2],
-    [3, null]
-];
+//const desiredState = [
+//    [1, 2],
+//    [3, null]
+//];
 
 var printState = (state: number[][]) => {
     for (var i = 0; i < state.length; i++) {
-        console.log(state[i]);
+        var line = "";
+        for (var j = 0; j < state[i].length; j++) {
+            if (state[i][j]) {
+                line += state[i][j] + "\t";
+            } else {
+                line +=  "\t";
+            }
+        }
+        console.log(line);
     }
 };
 
@@ -42,13 +77,14 @@ console.log('Solved.');
 var display = (stateIndex: number) => {
     var state = moves[stateIndex];
 
-    console.log('\033[2J'); // clear
+    process.stdout.write('\033c');
     console.log("Solution:");
     printState(state);
-    if (stateIndex < moves.length-1) {
+    if (stateIndex < moves.length - 1) {
         stateIndex++;
-        setTimeout(display, 1500, stateIndex);
-        
+        setTimeout(display, 1000, stateIndex);
+    } else {
+        setTimeout(display, 6000, 0);
     }
 }
 setTimeout(display, 1000, 0);
